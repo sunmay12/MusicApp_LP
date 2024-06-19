@@ -1,6 +1,11 @@
 package com.example.minseo;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +24,13 @@ public class HomeFragment extends Fragment {
 
     private ProfileFragment profileFragment;
     private MusicManager musicManager;
-    private ImageView profile;
+    private ImageView profileImageView;
+    private TextView userNameTextView;
+
+    // SharedPreferences 키 상수들
+    private static final String SHARED_PREFS = "sharedPrefs";
+    private static final String KEY_PROFILE_IMAGE = "profileImage";
+    private static final String KEY_USER_NAME = "userName";
 
     @Nullable
     @Override
@@ -28,8 +39,12 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         profileFragment = new ProfileFragment();
-        profile = view.findViewById(R.id.profile);
+        profileImageView = view.findViewById(R.id.profile);
+        userNameTextView = view.findViewById(R.id.userName);
         musicManager = MusicManager.getInstance(getActivity());
+
+        // 프로필 데이터 로드
+        loadUserData();
 
         // MusicManager에서 즐겨찾기한 음악 리스트를 가져옴
         List<Music> favoriteMusicList = musicManager.getFavoriteMusicList();
@@ -49,7 +64,7 @@ public class HomeFragment extends Fragment {
         recyclerView.setAdapter(adapter);
 
         // Profile 이미지 뷰 설정
-        profile.setOnClickListener(new View.OnClickListener() {
+        profileImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // profile_fragment로 전환
@@ -59,7 +74,23 @@ public class HomeFragment extends Fragment {
                         .commit();
             }
         });
+
         return view;
+    }
+
+    // SharedPreferences에서 프로필 데이터 불러오기
+    private void loadUserData() {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        String encodedImage = sharedPreferences.getString(KEY_PROFILE_IMAGE, null);
+        String userName = sharedPreferences.getString(KEY_USER_NAME, "user-12345");
+
+        if (encodedImage != null) {
+            byte[] decodedByte = Base64.decode(encodedImage, Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length);
+            profileImageView.setImageBitmap(bitmap);
+        }
+
+        userNameTextView.setText(userName);
     }
 
     // RecyclerView의 Adapter 클래스 정의

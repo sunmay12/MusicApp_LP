@@ -1,6 +1,11 @@
 package com.example.minseo;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,26 +25,26 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileFragment extends Fragment {
 
+    private static final String SHARED_PREFS = "sharedPrefs";
+    private static final String PROFILE_IMAGE = "profileImage";
+    private static final String USER_NAME = "userName";
+
     private MusicManager musicManager;
     private CircleImageView userProfile;
     private TextView userName;
-    private TextView showFavorite;
+    private ImageButton editButton;
     private RecyclerView listeningMusicRecyclerView;
-    private EditProfileFragment editProfileFragment;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // Fragment의 레이아웃을 inflate
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         // 뷰 초기화
         userProfile = view.findViewById(R.id.user_profile);
         userName = view.findViewById(R.id.user_name);
-        showFavorite = view.findViewById(R.id.show_favorite);
         listeningMusicRecyclerView = view.findViewById(R.id.ListeningMusic);
-        ImageButton editButton = view.findViewById(R.id.button_edit);
-        editProfileFragment = new EditProfileFragment();
+        editButton = view.findViewById(R.id.button_edit);
 
         // MusicManager 초기화
         musicManager = MusicManager.getInstance(getActivity());
@@ -57,16 +62,33 @@ public class ProfileFragment extends Fragment {
         });
         listeningMusicRecyclerView.setAdapter(adapter);
 
+        // SharedPreferences에서 사용자 데이터 불러오기
+        loadUserData();
+
         // 수정 버튼 클릭 리스너 설정
         editButton.setOnClickListener(v -> {
-            // 수정 버튼 클릭 시 EditProfileFragment로 전환
+            // EditProfileFragment로 전환
             getParentFragmentManager().beginTransaction()
-                    .replace(R.id.containers, editProfileFragment)
+                    .replace(R.id.containers, new EditProfileFragment())
                     .addToBackStack(null)
                     .commit();
         });
 
         return view;
+    }
+
+    private void loadUserData() {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        String encodedImage = sharedPreferences.getString(PROFILE_IMAGE, null);
+        String name = sharedPreferences.getString(USER_NAME, "user-12345");
+
+        if (encodedImage != null) {
+            byte[] decodedByte = Base64.decode(encodedImage, Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length);
+            userProfile.setImageBitmap(bitmap);
+        }
+
+        userName.setText(name);
     }
 
     // RecyclerView의 Adapter 클래스 정의

@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginBottom="20dp"
-            android:hint="user-12345"
+            android:hint="user"
             android:textColor="@color/black"
             android:textSize="26dp"
             android:textStyle="bold" />
