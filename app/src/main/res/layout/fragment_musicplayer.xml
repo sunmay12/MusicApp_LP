@@ -16,7 +16,7 @@
             android:layout_gravity="bottom|right"
             android:layout_marginBottom="185dp"
             android:layout_marginRight="75dp"
-            android:src="@drawable/ic_lp" />
+            android:src="@drawable/ic_lp_icon" />
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/lp_cover"

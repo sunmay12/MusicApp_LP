@@ -1,8 +1,5 @@
 package com.example.minseo;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,13 +16,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class ProfileFragment extends Fragment {
 
-    private ImageButton editBtn;
-    private ImageView profileImage;
-    private TextView nameText;
-    private RecyclerView listeningMusicRecyclerView;
     private MusicManager musicManager;
+    private CircleImageView userProfile;
+    private TextView userName;
+    private TextView showFavorite;
+    private RecyclerView listeningMusicRecyclerView;
+    private EditProfileFragment editProfileFragment;
 
     @Nullable
     @Override
@@ -34,57 +34,49 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         // 뷰 초기화
-        editBtn = view.findViewById(R.id.button_edit);
-        profileImage = view.findViewById(R.id.user_profile);
-        nameText = view.findViewById(R.id.user_name);
+        userProfile = view.findViewById(R.id.user_profile);
+        userName = view.findViewById(R.id.user_name);
+        showFavorite = view.findViewById(R.id.show_favorite);
         listeningMusicRecyclerView = view.findViewById(R.id.ListeningMusic);
+        ImageButton editButton = view.findViewById(R.id.button_edit);
+        editProfileFragment = new EditProfileFragment();
 
-        // 프로필 정보 업데이트
-        loadProfileInfo();
-
-        // MusicManager 인스턴스 생성
+        // MusicManager 초기화
         musicManager = MusicManager.getInstance(getActivity());
 
-        // MusicManager에서 감상 중인 음악 리스트를 가져옴
+        // 감상 중인 음악 리스트를 가져옴
         List<Music> listeningMusicList = musicManager.getPlaybackList();
 
-        // RecyclerView 설정
+        // 리사이클러뷰 설정
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
         listeningMusicRecyclerView.setLayoutManager(layoutManager);
-
-        // RecyclerView에 어댑터 설정
-        ListeningMusicAdapter adapter = new ListeningMusicAdapter(listeningMusicList);
+        ListeningMusicAdapter adapter = new ListeningMusicAdapter(listeningMusicList, music -> {
+            // 음악 재생
+            musicManager.setCurrentSelectedMusic(music);
+            musicManager.playMusic(music.getAudioResourceId());
+        });
         listeningMusicRecyclerView.setAdapter(adapter);
 
-        editBtn.setOnClickListener(v -> getParentFragmentManager().beginTransaction()
-                .replace(R.id.containers, new ProfileEditFragment())
-                .addToBackStack(null)
-                .commit());
+        // 수정 버튼 클릭 리스너 설정
+        editButton.setOnClickListener(v -> {
+            // 수정 버튼 클릭 시 EditProfileFragment로 전환
+            getParentFragmentManager().beginTransaction()
+                    .replace(R.id.containers, editProfileFragment)
+                    .addToBackStack(null)
+                    .commit();
+        });
 
         return view;
-    }
-
-    private void loadProfileInfo() {
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("ProfilePrefs", Context.MODE_PRIVATE);
-        String userName = sharedPreferences.getString("userName", null);
-        String profileImageUriString = sharedPreferences.getString("profileImageUri", null);
-
-        if (userName != null) {
-            nameText.setText(userName);
-        }
-        if (profileImageUriString != null) {
-            Uri profileImageUri = Uri.parse(profileImageUriString);
-            profileImage.setImageURI(profileImageUri);
-        }
     }
 
     // RecyclerView의 Adapter 클래스 정의
     private class ListeningMusicAdapter extends RecyclerView.Adapter<ListeningMusicAdapter.ListeningMusicViewHolder> {
         private List<Music> listeningMusicList;
+        private OnItemClickListener listener;
 
-        // Adapter 생성자
-        public ListeningMusicAdapter(List<Music> listeningMusicList) {
+        public ListeningMusicAdapter(List<Music> listeningMusicList, OnItemClickListener listener) {
             this.listeningMusicList = listeningMusicList;
+            this.listener = listener;
         }
 
         @NonNull
@@ -100,6 +92,7 @@ public class ProfileFragment extends Fragment {
             holder.coverImageView.setImageResource(music.getImageResource());
             holder.titleTextView.setText(music.getTitle());
             holder.artistTextView.setText(music.getArtist());
+            holder.bind(music, listener);
         }
 
         @Override
@@ -118,6 +111,14 @@ public class ProfileFragment extends Fragment {
                 titleTextView = itemView.findViewById(R.id.titleTextView);
                 artistTextView = itemView.findViewById(R.id.artistTextView);
             }
+
+            public void bind(final Music music, final OnItemClickListener listener) {
+                itemView.setOnClickListener(v -> listener.onItemClick(music));
+            }
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(Music music);
     }
 }

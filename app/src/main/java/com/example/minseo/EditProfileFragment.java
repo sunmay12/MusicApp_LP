@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,74 +17,72 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class HomeFragment extends Fragment {
+import de.hdodenhof.circleimageview.CircleImageView;
 
-    private ProfileFragment profileFragment;
+public class EditProfileFragment extends Fragment {
+
     private MusicManager musicManager;
-    private ImageView profile;
+    private CircleImageView editProfile;
+    private EditText editName;
+    private RecyclerView listeningMusicRecyclerView;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // Fragment의 레이아웃을 inflate
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_edit_profile, container, false);
 
-        profileFragment = new ProfileFragment();
-        profile = view.findViewById(R.id.profile);
+        // 뷰 초기화
+        editProfile = view.findViewById(R.id.edit_profile);
+        editName = view.findViewById(R.id.uedit_name);
+        listeningMusicRecyclerView = view.findViewById(R.id.ListeningMusic);
+        ImageButton finishButton = view.findViewById(R.id.button_finish);
+
+        // MusicManager 초기화
         musicManager = MusicManager.getInstance(getActivity());
 
-        // MusicManager에서 즐겨찾기한 음악 리스트를 가져옴
-        List<Music> favoriteMusicList = musicManager.getFavoriteMusicList();
+        // 감상 중인 음악 리스트를 가져옴
+        List<Music> listeningMusicList = musicManager.getPlaybackList();
 
-        // RecyclerView 설정
-        RecyclerView recyclerView = view.findViewById(R.id.favoriteMusicRecyclerView);
-        // GridLayoutManager로 변경, spanCount를 2로 설정
+        // 리사이클러뷰 설정
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
-        recyclerView.setLayoutManager(layoutManager);
-
-        // RecyclerView에 어댑터 설정
-        FavoriteMusicAdapter adapter = new FavoriteMusicAdapter(favoriteMusicList, music -> {
+        listeningMusicRecyclerView.setLayoutManager(layoutManager);
+        ListeningMusicAdapter adapter = new ListeningMusicAdapter(listeningMusicList, music -> {
             // 음악 재생
             musicManager.setCurrentSelectedMusic(music);
             musicManager.playMusic(music.getAudioResourceId());
         });
-        recyclerView.setAdapter(adapter);
+        listeningMusicRecyclerView.setAdapter(adapter);
 
-        // Profile 이미지 뷰 설정
-        profile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // profile_fragment로 전환
-                getParentFragmentManager().beginTransaction()
-                        .replace(R.id.containers, profileFragment)
-                        .addToBackStack(null)
-                        .commit();
-            }
+        // 완료 버튼 클릭 리스너 설정
+        finishButton.setOnClickListener(v -> {
+            // 프로필 수정 완료 후 기존 화면으로 돌아가기
+            getParentFragmentManager().popBackStack();
         });
+
         return view;
     }
 
     // RecyclerView의 Adapter 클래스 정의
-    private class FavoriteMusicAdapter extends RecyclerView.Adapter<FavoriteMusicAdapter.FavoriteMusicViewHolder> {
-        private List<Music> favoriteMusicList;
+    private class ListeningMusicAdapter extends RecyclerView.Adapter<ListeningMusicAdapter.ListeningMusicViewHolder> {
+        private List<Music> listeningMusicList;
         private OnItemClickListener listener;
 
-        // Adapter 생성자
-        public FavoriteMusicAdapter(List<Music> favoriteMusicList, OnItemClickListener listener) {
-            this.favoriteMusicList = favoriteMusicList;
+        public ListeningMusicAdapter(List<Music> listeningMusicList, OnItemClickListener listener) {
+            this.listeningMusicList = listeningMusicList;
             this.listener = listener;
         }
 
         @NonNull
         @Override
-        public FavoriteMusicViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        public ListeningMusicViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_item, parent, false);
-            return new FavoriteMusicViewHolder(view);
+            return new ListeningMusicViewHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(@NonNull FavoriteMusicViewHolder holder, int position) {
-            Music music = favoriteMusicList.get(position);
+        public void onBindViewHolder(@NonNull ListeningMusicViewHolder holder, int position) {
+            Music music = listeningMusicList.get(position);
             holder.coverImageView.setImageResource(music.getImageResource());
             holder.titleTextView.setText(music.getTitle());
             holder.artistTextView.setText(music.getArtist());
@@ -91,16 +91,15 @@ public class HomeFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return favoriteMusicList.size();
+            return listeningMusicList.size();
         }
 
-        // ViewHolder 클래스 정의
-        public class FavoriteMusicViewHolder extends RecyclerView.ViewHolder {
+        public class ListeningMusicViewHolder extends RecyclerView.ViewHolder {
             ImageView coverImageView;
             TextView titleTextView;
             TextView artistTextView;
 
-            public FavoriteMusicViewHolder(@NonNull View itemView) {
+            public ListeningMusicViewHolder(@NonNull View itemView) {
                 super(itemView);
                 coverImageView = itemView.findViewById(R.id.coverImageView);
                 titleTextView = itemView.findViewById(R.id.titleTextView);
@@ -113,7 +112,6 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    // OnItemClickListener 인터페이스 정의
     public interface OnItemClickListener {
         void onItemClick(Music music);
     }

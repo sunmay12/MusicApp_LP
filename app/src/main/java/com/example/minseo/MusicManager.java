@@ -36,24 +36,20 @@ public class MusicManager {
     // 음악 데이터를 초기화하는 메서드
     private void initializeMusics() {
         // 음악 데이터 추가
-        addMusic(new Music("그랬나봐", "김형중", R.drawable.lp_khj_1, R.raw.ms_khj_maybe));
         addMusic(new Music("그녀가 웃잖아...", "김형중", R.drawable.lp_khj_2, R.raw.ms_khj_shessmile));
         addMusic(new Music("좋은 사람", "Toy", R.drawable.lp_toy_fermata, R.raw.ms_toy_goodperson));
         addMusic(new Music("피아니시모", "Toy", R.drawable.lp_toy_decapo, R.raw.ms_toy_pianisimo));
         addMusic(new Music("오렌지 마말레이드", "자우림", R.drawable.lp_jaurim_wonderland, R.raw.ms_jaurim_orange));
         addMusic(new Music("미안해 널 좋아해", "자우림", R.drawable.lp_jaurim_apa, R.raw.ms_jaurim_sorryiloveyou));
-        addMusic(new Music("스물다섯 스물하나", "자우림", R.drawable.lp_jaurim_goodbye, R.raw.ms_jaurim_2521));
         addMusic(new Music("애인발견!!", "자우림", R.drawable.lp_jaurim_perpleheart, R.raw.ms_jaurim_findlover));
         addMusic(new Music("사랑하기 때문에", "유재하", R.drawable.lp_yjh_becauseilove, R.raw.ms_yjh_becauseilove));
         addMusic(new Music("지난 날", "유재하", R.drawable.lp_yjh_becauseilove, R.raw.ms_yjh_lastday));
         addMusic(new Music("내 마음에 비친 내 모습", "유재하", R.drawable.lp_yjh_becauseilove, R.raw.ms_yjh_meinmymind));
         addMusic(new Music("소녀", "이문세", R.drawable.lp_lms_idontknowyet, R.raw.ms_lms_agirl));
-        addMusic(new Music("가을이 오면", "이문세", R.drawable.lp_lms_4, R.raw.ms_lms_thefalliscame));
         addMusic(new Music("사랑이 지나가면", "이문세", R.drawable.lp_lms_4, R.raw.ms_lms_theloveispassed));
         addMusic(new Music("옛사랑", "이문세", R.drawable.lp_lms_7, R.raw.ms_lms_pastlove));
         addMusic(new Music("가로수 그늘 아래 서면", "이문세", R.drawable.lp_lms_5, R.raw.ms_lms_underthetree));
         addMusic(new Music("조조할인", "이문세", R.drawable.lp_lms_hwa, R.raw.ms_lms_earlymorning));
-        addMusic(new Music("Nicer", "The Volunteers", R.drawable.lp_thevolun_thevolun, R.raw.ms_thevolun_nicer));
         addMusic(new Music("S.A.D", "The Volunteers", R.drawable.lp_thevolun_thevolun, R.raw.ms_thevolun_sad));
         addMusic(new Music("Summer", "The Volunteers", R.drawable.lp_thevolun_thevolun, R.raw.ms_thevolun_summer));
         addMusic(new Music("New Plant", "The Volunteers", R.drawable.lp_thevolun_newplant, R.raw.ms_thevolun_newplant));
@@ -62,18 +58,13 @@ public class MusicManager {
         addMusic(new Music("Bye Bye My Blue", "백예린", R.drawable.lp_yr_byebye, R.raw.ms_yr_byebye));
         addMusic(new Music("popo", "백예린", R.drawable.lp_yr_everyletter, R.raw.ms_yr_popo));
         addMusic(new Music("Antifreeze", "백예린", R.drawable.lp_yr_gift, R.raw.ms_yr_antifreeze));
-        addMusic(new Music("Loner", "백예린", R.drawable.lp_yr_tellus, R.raw.ms_yr_loner));
         addMusic(new Music("숙녀에게", "변진섭", R.drawable.lp_bjs_again, R.raw.ms_bjs_toaladay));
         addMusic(new Music("네게 줄 수 있는 건 오직 사랑뿐", "변진섭", R.drawable.lp_bjs_alone, R.raw.ms_bjs_onlythingtogiveyou));
         addMusic(new Music("Oh, My Love", "S.E.S", R.drawable.lp_ses_1, R.raw.ms_ses_ohmylove));
         addMusic(new Music("애인찾기", "S.E.S", R.drawable.lp_ses_2, R.raw.ms_ses_findlover));
-        addMusic(new Music("Just A Feeling", "S.E.S", R.drawable.lp_ses_choosemylife, R.raw.ms_ses_justafeeling));
-        addMusic(new Music("Like A Shooting Star", "S.E.S", R.drawable.lp_ses_reachout, R.raw.ms_ses_likeashootingstar));
         addMusic(new Music("Sweet Dream", "장나라", R.drawable.lp_nara_sweetdream, R.raw.ms_nara_sweetdream));
         addMusic(new Music("고백하기 좋은 날", "장나라", R.drawable.lp_nara_loveschool, R.raw.ms_nara_agoodday));
-        addMusic(new Music("왜 그래", "김현철", R.drawable.lp_khc_best, R.raw.ms_khc_youreactingstrange));
         addMusic(new Music("연애", "김현철", R.drawable.lp_khc_best, R.raw.ms_khc_dating));
-        addMusic(new Music("오랜만에", "김현철", R.drawable.lp_khc_1, R.raw.ms_khc_foralongtime));
         addMusic(new Music("동네", "김현철", R.drawable.lp_khc_1, R.raw.ms_khc_village));
         addMusic(new Music("안녕", "박혜경", R.drawable.lp_phk_saraphim, R.raw.ms_phk_hi));
         addMusic(new Music("고백", "박혜경", R.drawable.lp_phk_01, R.raw.ms_phk_confession));
