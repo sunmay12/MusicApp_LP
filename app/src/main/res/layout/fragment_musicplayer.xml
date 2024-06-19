@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <ImageView
+            android:id="@+id/lp"
+            android:layout_width="470dp"
+            android:layout_height="470dp"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="185dp"
+            android:layout_marginRight="75dp"
+            android:src="@drawable/ic_lp" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/lp_cover"
+            android:layout_width="240dp"
+            android:layout_height="240dp"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="300dp"
+            android:layout_marginRight="190dp" />
+
+        <ImageView
+            android:id="@+id/tonearm"
+            android:layout_width="120dp"
+            android:layout_height="350dp"
+            android:layout_gravity="bottom|right"
+            android:layout_marginRight="11dp"
+            android:layout_marginBottom="310dp"
+            android:rotation="4"
+            android:src="@drawable/ic_tonearm" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="130dp"
+            android:layout_marginLeft="25dp"
+            android:layout_height="40dp"
+            android:textStyle="bold"
+            android:text="노래 제목"
+            android:textSize="25dp" />
+
+        <TextView
+            android:id="@+id/singer"
+            android:layout_width="match_parent"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="100dp"
+            android:layout_marginLeft="25dp"
+            android:layout_height="30dp"
+            android:text="가수 이름"
+            android:textSize="16dp" />
+
+        <SeekBar
+            android:id="@+id/seekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginBottom="25dp"
+            android:max="100" />
+
+        <TextView
+            android:id="@+id/current_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|left"
+            android:layout_marginLeft="30dp"
+            android:text="0:00"
+            android:textSize="17dp" />
+
+        <TextView
+            android:id="@+id/total_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginRight="30dp"
+            android:text="0:00"
+            android:textSize="17dp" />
+
+        <ImageButton
+            android:id="@+id/button_heart"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="bottom|left"
+            android:layout_marginLeft="30dp"
+            android:layout_marginBottom="45dp"
+            android:contentDescription="관심 버튼"
+            android:src="@drawable/ic_emptyheart"
+            android:background="@android:color/transparent" />
+
+        <ImageButton
+            android:id="@+id/button_state"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="bottom|center"
+            android:layout_marginBottom="45dp"
+            android:contentDescription="재생 버튼"
+            android:src="@drawable/ic_pause"
+            android:background="@android:color/transparent" />
+
+        <ImageButton
+            android:id="@+id/button_next"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="45dp"
+            android:layout_marginRight="100dp"
+            android:contentDescription="다음 버튼"
+            android:src="@drawable/ic_next"
+            android:background="@android:color/transparent" />
+
+        <ImageButton
+            android:id="@+id/button_previous"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="bottom|left"
+            android:layout_marginBottom="45dp"
+            android:layout_marginLeft="100dp"
+            android:contentDescription="이전 버튼"
+            android:src="@drawable/ic_previous"
+            android:background="@android:color/transparent" />
+
+        <ImageButton
+            android:id="@+id/button_list"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="45dp"
+            android:layout_marginRight="30dp"
+            android:contentDescription="재생목록 버튼"
+            android:src="@drawable/ic_list"
+            android:background="@android:color/transparent" />
+    </FrameLayout>
+</LinearLayout>
