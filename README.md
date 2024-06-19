@@ -134,3 +134,6 @@ LP레코드판이 음악이 재생될 때 동안 회전하고, 멈추면 함께 
 
 
 발표 영상
+
+https://www.youtube.com/watch?v=_x8LA39jrfE&t=7s
+
