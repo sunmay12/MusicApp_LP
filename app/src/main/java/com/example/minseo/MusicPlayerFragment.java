@@ -19,20 +19,21 @@ import androidx.fragment.app.FragmentTransaction;
 
 public class MusicPlayerFragment extends Fragment {
 
-    private MusicManager musicManager;
-    private View musicBar;
-    private ImageView lpCoverImageView, lpImageView;
-    private ObjectAnimator rotationAnimator, rotationAnimatorCover;
-    private ImageButton playPauseButton, heartButton, listButton, previousButton, nextButton;
-    private SeekBar seekBar;
-    private TextView currentTimeTextView, totalTimeTextView;
-    private Handler handler = new Handler();
+    private MusicManager musicManager; // 음악 재생을 관리하는 객체
+    private View musicBar; // 하단의 음악바
+    private ImageView lpCoverImageView, lpImageView; // LP 커버와 LP 이미지를 표시하는 이미지뷰
+    private ObjectAnimator rotationAnimator, rotationAnimatorCover; // LP 회전을 위한 애니메이터
+    private ImageButton playPauseButton, heartButton, listButton, previousButton, nextButton; // 음악 재생 제어 버튼들
+    private SeekBar seekBar; // 음악 재생 위치를 나타내는 시크바
+    private TextView currentTimeTextView, totalTimeTextView; // 현재 재생 시간과 전체 재생 시간을 표시하는 텍스트뷰
+    private Handler handler = new Handler(); // 주기적인 UI 업데이트를 위한 핸들러
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_musicplayer, container, false);
 
+        // 뷰 초기화
         lpImageView = view.findViewById(R.id.lp);
         lpCoverImageView = view.findViewById(R.id.lp_cover);
         TextView titleTextView = view.findViewById(R.id.title);
@@ -46,8 +47,10 @@ public class MusicPlayerFragment extends Fragment {
         previousButton = view.findViewById(R.id.button_previous);
         nextButton = view.findViewById(R.id.button_next);
 
+        // MusicManager 초기화
         musicManager = MusicManager.getInstance(getActivity());
 
+        // LP 회전 애니메이션 설정
         rotationAnimator = ObjectAnimator.ofFloat(lpImageView, "rotation", 0f, 360f);
         rotationAnimator.setDuration(2000);
         rotationAnimator.setRepeatCount(ObjectAnimator.INFINITE);
@@ -58,6 +61,7 @@ public class MusicPlayerFragment extends Fragment {
         rotationAnimatorCover.setRepeatCount(ObjectAnimator.INFINITE);
         rotationAnimatorCover.setInterpolator(new LinearInterpolator());
 
+        // 번들에서 음악 데이터 가져오기
         Bundle bundle = getArguments();
         if (bundle != null) {
             int imageResource = bundle.getInt("imageResource");
@@ -81,26 +85,30 @@ public class MusicPlayerFragment extends Fragment {
             musicManager.setCurrentSelectedMusic(currentMusic);
             musicManager.playMusic(audioResourceId);
 
-            updateHeartButton();
+            updateHeartButton(); // 좋아요 버튼 상태 업데이트
         } else {
+            // 현재 재생 중인 음악 정보 표시
             Music currentMusic = musicManager.getCurrentSelectedMusic();
             if (currentMusic != null) {
                 lpCoverImageView.setImageResource(currentMusic.getImageResource());
                 titleTextView.setText(currentMusic.getTitle());
                 singerTextView.setText(currentMusic.getArtist());
             }
-            updateHeartButton();
+            updateHeartButton(); // 좋아요 버튼 상태 업데이트
         }
 
+        // 음악바 숨기기
         musicBar = getActivity().findViewById(R.id.musicBar);
         if (musicBar != null) {
             musicBar.setVisibility(View.GONE);
         }
 
+        // 버튼 클릭 리스너 설정
         setupPlayPauseButton();
         setupSeekBar();
         setupHeartButton();
 
+        // 리스트 버튼 클릭 리스너 설정
         listButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -112,6 +120,7 @@ public class MusicPlayerFragment extends Fragment {
             }
         });
 
+        // 이전 곡 버튼 클릭 리스너 설정
         previousButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,6 +129,7 @@ public class MusicPlayerFragment extends Fragment {
             }
         });
 
+        // 다음 곡 버튼 클릭 리스너 설정
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,11 +138,13 @@ public class MusicPlayerFragment extends Fragment {
             }
         });
 
+        // 시크바 업데이트
         updateSeekBar();
 
         return view;
     }
 
+    // UI 업데이트
     private void updateUI() {
         Music currentMusic = musicManager.getCurrentSelectedMusic();
         if (currentMusic != null) {
@@ -147,6 +159,7 @@ public class MusicPlayerFragment extends Fragment {
         }
     }
 
+    // 좋아요 버튼 설정
     private void setupHeartButton() {
         heartButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -161,6 +174,7 @@ public class MusicPlayerFragment extends Fragment {
         updateHeartButton();
     }
 
+    // 좋아요 버튼 상태 업데이트
     private void updateHeartButton() {
         Music currentMusic = musicManager.getCurrentSelectedMusic();
         if (currentMusic != null && musicManager.isFavoriteMusic(currentMusic)) {
@@ -170,6 +184,7 @@ public class MusicPlayerFragment extends Fragment {
         }
     }
 
+    // 재생/일시정지 버튼 설정
     private void setupPlayPauseButton() {
         playPauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -189,6 +204,7 @@ public class MusicPlayerFragment extends Fragment {
         });
     }
 
+    // 시크바 설정
     private void setupSeekBar() {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -208,6 +224,7 @@ public class MusicPlayerFragment extends Fragment {
         });
     }
 
+    // 시크바 업데이트
     private void updateSeekBar() {
         handler.postDelayed(new Runnable() {
             @Override
@@ -226,6 +243,7 @@ public class MusicPlayerFragment extends Fragment {
         }, 1000);
     }
 
+    // 시간 형식 설정
     private String formatTime(int timeInMillis) {
         int minutes = (timeInMillis / 1000) / 60;
         int seconds = (timeInMillis / 1000) % 60;

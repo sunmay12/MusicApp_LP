@@ -25,10 +25,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileFragment extends Fragment {
 
+    // SharedPreferences 키 상수 정의
     private static final String SHARED_PREFS = "sharedPrefs";
     private static final String PROFILE_IMAGE = "profileImage";
     private static final String USER_NAME = "userName";
 
+    // UI 요소 및 데이터 관리 객체 선언
     private MusicManager musicManager;
     private CircleImageView userProfile;
     private TextView userName;
@@ -38,9 +40,10 @@ public class ProfileFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        // fragment_profile 레이아웃을 인플레이트하여 뷰 생성
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        // 뷰 초기화
+        // 뷰 요소 초기화
         userProfile = view.findViewById(R.id.user_profile);
         userName = view.findViewById(R.id.user_name);
         listeningMusicRecyclerView = view.findViewById(R.id.ListeningMusic);
@@ -49,14 +52,14 @@ public class ProfileFragment extends Fragment {
         // MusicManager 초기화
         musicManager = MusicManager.getInstance(getActivity());
 
-        // 감상 중인 음악 리스트를 가져옴
+        // 현재 재생 중인 음악 리스트 가져오기
         List<Music> listeningMusicList = musicManager.getPlaybackList();
 
-        // 리사이클러뷰 설정
+        // RecyclerView 설정
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
         listeningMusicRecyclerView.setLayoutManager(layoutManager);
         ListeningMusicAdapter adapter = new ListeningMusicAdapter(listeningMusicList, music -> {
-            // 음악 재생
+            // 음악 클릭 시 음악 재생
             musicManager.setCurrentSelectedMusic(music);
             musicManager.playMusic(music.getAudioResourceId());
         });
@@ -77,17 +80,20 @@ public class ProfileFragment extends Fragment {
         return view;
     }
 
+    // SharedPreferences에서 사용자 데이터를 불러와서 UI에 설정하는 메서드
     private void loadUserData() {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         String encodedImage = sharedPreferences.getString(PROFILE_IMAGE, null);
         String name = sharedPreferences.getString(USER_NAME, "user-12345");
 
+        // 프로필 이미지가 있는 경우 디코딩하여 설정
         if (encodedImage != null) {
             byte[] decodedByte = Base64.decode(encodedImage, Base64.DEFAULT);
             Bitmap bitmap = BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length);
             userProfile.setImageBitmap(bitmap);
         }
 
+        // 사용자 이름 설정
         userName.setText(name);
     }
 
@@ -96,11 +102,13 @@ public class ProfileFragment extends Fragment {
         private List<Music> listeningMusicList;
         private OnItemClickListener listener;
 
+        // 어댑터 생성자
         public ListeningMusicAdapter(List<Music> listeningMusicList, OnItemClickListener listener) {
             this.listeningMusicList = listeningMusicList;
             this.listener = listener;
         }
 
+        // ViewHolder를 생성하여 반환하는 메서드
         @NonNull
         @Override
         public ListeningMusicViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -108,6 +116,7 @@ public class ProfileFragment extends Fragment {
             return new ListeningMusicViewHolder(view);
         }
 
+        // ViewHolder에 데이터를 바인딩하는 메서드
         @Override
         public void onBindViewHolder(@NonNull ListeningMusicViewHolder holder, int position) {
             Music music = listeningMusicList.get(position);
@@ -117,16 +126,19 @@ public class ProfileFragment extends Fragment {
             holder.bind(music, listener);
         }
 
+        // 아이템 개수 반환 메서드
         @Override
         public int getItemCount() {
             return listeningMusicList.size();
         }
 
+        // ViewHolder 클래스 정의
         public class ListeningMusicViewHolder extends RecyclerView.ViewHolder {
             ImageView coverImageView;
             TextView titleTextView;
             TextView artistTextView;
 
+            // ViewHolder 생성자
             public ListeningMusicViewHolder(@NonNull View itemView) {
                 super(itemView);
                 coverImageView = itemView.findViewById(R.id.coverImageView);
@@ -134,12 +146,14 @@ public class ProfileFragment extends Fragment {
                 artistTextView = itemView.findViewById(R.id.artistTextView);
             }
 
+            // 뷰에 클릭 리스너 바인딩 메서드
             public void bind(final Music music, final OnItemClickListener listener) {
                 itemView.setOnClickListener(v -> listener.onItemClick(music));
             }
         }
     }
 
+    // 아이템 클릭 리스너 인터페이스 정의
     public interface OnItemClickListener {
         void onItemClick(Music music);
     }
