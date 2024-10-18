@@ -1,7 +1,7 @@
 # 음악 LP 플레이어🎵
 
 제작 기간: 2024.05.25~2024.06.19
-<br>
+<br><br><br>
 
 ### 개발 배경
 
@@ -82,3 +82,4 @@
 
 ### 발표 영상
 https://youtu.be/_x8LA39jrfE?si=uEVtGhIrFIFWmSfv
+<br><br><br>
