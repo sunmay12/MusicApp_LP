@@ -1,5 +1,8 @@
-# 음악 LP 플레이어
+# 음악 LP 플레이어🎵
 
+제작 기간: 2024.05.20~2024.06.
+
+-
 
 배경:
 
@@ -140,5 +143,4 @@ LP레코드판이 음악이 재생될 때 동안 회전하고, 멈추면 함께 
 
 발표 영상
 
-https://www.youtube.com/watch?v=_x8LA39jrfE&t=7s
-
+https://youtu.be/_x8LA39jrfE?si=uEVtGhIrFIFWmSfv
